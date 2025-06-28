@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+
+    <!-- Root element: repository -->
+    <xs:element name="repository">
+        <xs:annotation>
+            <xs:documentation> Root element containing repository information and its commits </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation> Repository name (typically derived from URL basename) </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+
+                <xs:element name="url" type="xs:anyURI">
+                    <xs:annotation>
+                        <xs:documentation> Full URL of the Git repository </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+
+                <xs:element name="commits">
+                    <xs:annotation>
+                        <xs:documentation> Container for all commits from this repository </xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="commit" type="CommitType" minOccurs="0"
+                                maxOccurs="unbounded">
+                                <xs:annotation>
+                                    <xs:documentation> Individual commit information </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Complex type for commit structure -->
+    <xs:complexType name="CommitType">
+        <xs:annotation>
+            <xs:documentation> Structure defining a single Git commit with its metadata </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="hash" type="GitHashType">
+                <xs:annotation>
+                    <xs:documentation> Git commit hash (SHA-1, 40 hexadecimal characters) </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+
+            <xs:element name="author" type="EmailType">
+                <xs:annotation>
+                    <xs:documentation> Email address of the commit author </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+
+            <xs:element name="date" type="IsoDateTimeType">
+                <xs:annotation>
+                    <xs:documentation> Commit date and time in ISO format (from git log --date=iso) </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+
+            <xs:element name="message" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation> Complete commit message (subject + body). Wrapped in CDATA to
+                        preserve formatting and special characters. </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Custom type for Git hash validation -->
+    <xs:simpleType name="GitHashType">
+        <xs:annotation>
+            <xs:documentation> Git SHA-1 hash: exactly 40 hexadecimal characters </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-fA-F0-9]{40}" />
+            <xs:length value="40" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Custom type for email validation -->
+    <xs:simpleType name="EmailType">
+        <xs:annotation>
+            <xs:documentation> Basic email address pattern validation </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[^@]+@[^@]+\.[^@]+" />
+            <xs:minLength value="3" />
+            <xs:maxLength value="320" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Custom type for ISO datetime format -->
+    <xs:simpleType name="IsoDateTimeType">
+        <xs:annotation>
+            <xs:documentation> ISO datetime format as produced by git log --date=iso Format:
+                YYYY-MM-DD HH:MM:SS +TIMEZONE Example: 2025-06-28 10:30:45 +0200 </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <!-- Pattern for ISO datetime with timezone: YYYY-MM-DD HH:MM:SS +/-HHMM -->
+            <xs:pattern value="\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [+-]\d{4}" />
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>
