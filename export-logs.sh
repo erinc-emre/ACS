@@ -7,7 +7,7 @@ GIT_REPO_URLS=(
     #"https://github.com/facebook/react.git"
     "https://github.com/facebook/pyrefly.git"
 )
-NUM_LOGS=10  # Number of logs to export
+NUM_LOGS=9999999  # Number of logs to export
 OUTPUT_DIR="XML_commit_messages"  # Output directory name
 
 # Note: Each commit will be separated by a unique passphrase for easy parsing

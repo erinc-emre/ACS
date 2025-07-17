@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  qdrant:
+    image: qdrant/qdrant@ssha256:955afecd2b2df764f3a7b8e1628d99a88d1a738c5c2473e844d64e9355faae52
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./qdrant_storage:/qdrant/storage:z
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    runtime: nvidia
+
+  python:
+    image: python:3.12-slim
+    command: ["sleep", "infinity"]
+    volumes:
+      - ./app:/app
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile-python
