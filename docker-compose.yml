@@ -15,23 +15,6 @@ services:
             - capabilities: [gpu]
     runtime: nvidia
 
-  python:
-    image: python@sha256:9c1d9ed7593f2552a4ea47362ec0d2ddf5923458a53d0c8e30edf8b398c94a31
-    command: ["sh", "-c", "pip install -r requirements.txt && python app.py"]
-    volumes:
-      - ./app:/app
-    working_dir: /app
-    stdin_open: true
-    tty: true
-    build:
-      context: .
-      dockerfile: Dockerfile-python
-    environment:
-      - PIP_REQUIRE_VIRTUALENV=0
-    entrypoint: []
-    depends_on:
-      - qdrant
-
   jupyter:
     image: quay.io/jupyter/datascience-notebook@sha256:4b93f99fc05b7a4d2318bc1a25ca36083132bb9dfdf280c2e7edd7f6a3075a11
     ports:
