@@ -46,7 +46,7 @@ embeddings = model.encode(commit_messages, convert_to_numpy=True)
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance, PointStruct
 
-client = QdrantClient(host='localhost', port=6333)
+client = QdrantClient(host='qdrant', port=6333)
 
 if not client.collection_exists(collection_name="commits"):
     client.create_collection(

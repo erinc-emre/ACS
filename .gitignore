@@ -2,6 +2,8 @@
 git-logs.txt
 experimental/
 qdrant_storage/
+app/XML_commit_messages/
+app/commit_messages.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
