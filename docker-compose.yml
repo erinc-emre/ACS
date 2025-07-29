@@ -31,3 +31,16 @@ services:
     entrypoint: []
     depends_on:
       - qdrant
+
+  jupyter:
+    image: quay.io/jupyter/datascience-notebook@sha256:4b93f99fc05b7a4d2318bc1a25ca36083132bb9dfdf280c2e7edd7f6a3075a11
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./app:/home/jovyan/work
+    command: ["sh", "-c", "pip install -r /home/jovyan/work/requirements.txt && start-notebook.py --NotebookApp.token='' --NotebookApp.password=''"]
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - QDRANT_URL=http://qdrant:6333
+    depends_on:
+      - qdrant
